@@ -8,16 +8,35 @@ DESCRIPTION
     for me. So I re-engineered it using the lovely Moo.
 
 SYNTAX
-    my $nvp = WebService::PayPal::NVP->new( user => 'user.tld' pwd => 'xxx',
-    sig => 'xxxxxxx', branch => 'sandbox', );
-
-    my $res = $nvp->set_express_checkout({ DESC => 'Payment for something
-    cool', AMT => 25.00, CURRENCYCODE => 'GBP', PAYMENTACTION => 'Sale',
-    RETURNURL => "http://returnurl.tld", CANCELURL => 'http//cancelurl.tld",
-    LANDINGPAGE => 'Login', ADDOVERRIDE => 1, SHIPTONAME => "Customer Name",
-    SHIPTOSTREET => "7 Customer Street", SHIPTOSTREET2 => "", SHIPTOCITY =>
-    "Town", SHIPTOZIP => "Postcode", SHIPTOEMAIL => "customer\@example.com",
-    SHIPTOCOUNTRYCODE => 'GB', });
+        my $nvp = WebService::PayPal::NVP->new(
+            user   => 'user.tld'
+            pwd    => 'xxx',
+            sig    => 'xxxxxxx',
+            branch => 'sandbox',
+        );
+    
+        my $res = $nvp->set_express_checkout({
+            DESC              => 'Payment for something cool',
+            AMT               => 25.00,
+            CURRENCYCODE      => 'GBP',
+            PAYMENTACTION     => 'Sale',
+            RETURNURL         => "http://returnurl.tld",
+            CANCELURL         => 'http//cancelurl.tld",
+            LANDINGPAGE       => 'Login',
+            ADDOVERRIDE       => 1,
+            SHIPTONAME        => "Customer Name",
+            SHIPTOSTREET      => "7 Customer Street", 
+            SHIPTOSTREET2     => "", 
+            SHIPTOCITY        => "Town", 
+            SHIPTOZIP         => "Postcode", 
+            SHIPTOEMAIL       => "customer\@example.com", 
+            SHIPTOCOUNTRYCODE => 'GB',
+        });
+    
+        if ($res->{ACK} ne 'Success') {
+            say $_
+              for @{$nvp->errors};
+        }
 
 AUTHOR
     Brad Haywood <brad@geeksware.com>

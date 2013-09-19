@@ -4,7 +4,7 @@ use Moo;
 use LWP::UserAgent ();
 use URI::Escape qw/uri_escape uri_unescape/;
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 has 'errors' => (
     is => 'rw',

@@ -12,6 +12,7 @@ has 'errors' => (
         die "errors expects an array reference!\n"
             unless ref $_[0] eq 'ARRAY';
     },
+    default => sub { [] },
 );
 
 has 'user' => ( is => 'rw', required => 1 );
@@ -61,9 +62,22 @@ sub _do_request {
         return;
     }
 
-    return { map { uri_unescape($_) }
+    my $resp = { map { uri_unescape($_) }
         map { split '=', $_, 2 }
             split '&', $res->content };
+
+    if ($resp->{ACK} ne 'Success') {
+        $self->errors([]);
+        my $i = 0;
+        while(my $err = $resp->{"L_LONGMESSAGE${i}"}) {
+            push @{$self->errors},
+                $resp->{"L_LONGMESSAGE${i}"};
+            $i += 1;
+            #last if not $resp->{"L_LONGMESSAGE${i}"};
+        }
+    }
+
+    return $resp;
 }
 
 sub _build_content {
@@ -90,6 +104,15 @@ sub do_express_checkout_payment {
     $self->_do_request( $args );
 }
 
+sub get_express_checkout_details {
+    my ($self, $args) = @_;
+    $args->{method} = 'GetExpressCheckoutDetails';
+    $self->_do_request( $args );
+}
+
+1;
+__END__
+
 =head1 NAME
 
 WebService::PayPal::NVP - PayPal NVP API
@@ -100,30 +123,35 @@ This module is the result of a desperate attempt to save instances of L<Business
 
 =head1 SYNTAX
 
-my $nvp = WebService::PayPal::NVP->new(
-    user   => 'user.tld'
-    pwd    => 'xxx',
-    sig    => 'xxxxxxx',
-    branch => 'sandbox',
-);
-
-my $res = $nvp->set_express_checkout({
-    DESC              => 'Payment for something cool',
-    AMT               => 25.00,
-    CURRENCYCODE      => 'GBP',
-    PAYMENTACTION     => 'Sale',
-    RETURNURL         => "http://returnurl.tld",
-    CANCELURL         => 'http//cancelurl.tld",
-    LANDINGPAGE       => 'Login',
-    ADDOVERRIDE       => 1,
-    SHIPTONAME        => "Customer Name",
-    SHIPTOSTREET      => "7 Customer Street", 
-    SHIPTOSTREET2     => "", 
-    SHIPTOCITY        => "Town", 
-    SHIPTOZIP         => "Postcode", 
-    SHIPTOEMAIL       => "customer\@example.com", 
-    SHIPTOCOUNTRYCODE => 'GB',
-});
+    my $nvp = WebService::PayPal::NVP->new(
+        user   => 'user.tld'
+        pwd    => 'xxx',
+        sig    => 'xxxxxxx',
+        branch => 'sandbox',
+    );
+    
+    my $res = $nvp->set_express_checkout({
+        DESC              => 'Payment for something cool',
+        AMT               => 25.00,
+        CURRENCYCODE      => 'GBP',
+        PAYMENTACTION     => 'Sale',
+        RETURNURL         => "http://returnurl.tld",
+        CANCELURL         => 'http//cancelurl.tld",
+        LANDINGPAGE       => 'Login',
+        ADDOVERRIDE       => 1,
+        SHIPTONAME        => "Customer Name",
+        SHIPTOSTREET      => "7 Customer Street", 
+        SHIPTOSTREET2     => "", 
+        SHIPTOCITY        => "Town", 
+        SHIPTOZIP         => "Postcode", 
+        SHIPTOEMAIL       => "customer\@example.com", 
+        SHIPTOCOUNTRYCODE => 'GB',
+    });
+    
+    if ($res->{ACK} ne 'Success') {
+        say $_
+          for @{$nvp->errors};
+    }
 
 =head1 AUTHOR
 
@@ -134,6 +162,3 @@ Brad Haywood <brad@geeksware.com>
 You may distribute this code under the same terms as Perl itself.
 
 =cut
-
-1;
-__END__

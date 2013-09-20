@@ -17,7 +17,7 @@ resources (
    #IRC        => 'irc://irc.perl.org/#WebService-PayPal-NVP',
    license    => 'http://www.perlfoundation.org/artistic_license_2_0',
    #repository => 'git://github.com/Brad Haywood/WebService-PayPal-NVP.git',
-   bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=WebService-PayPal-NVP',
+   #bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=WebService-PayPal-NVP',
 );
 
 configure_requires (
@@ -29,8 +29,9 @@ build_requires (
 );
 
 requires (
-   #'ABC'              => 1.6,
-   #'Foo::Bar::Module' => 5.0401,
+    'LWP::UserAgent',
+    'Moo',
+    'URI::Escape',
 );
 
 install_as_cpan;

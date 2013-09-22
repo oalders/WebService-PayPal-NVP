@@ -3,8 +3,12 @@ package WebService::PayPal::NVP;
 use Moo;
 use LWP::UserAgent ();
 use URI::Escape qw/uri_escape uri_unescape/;
+use WebService::PayPal::NVP::Response;
+
+use feature 'state';
 
 our $VERSION = '0.002';
+$WebService::PayPal::NVP::counter = 0;
 
 has 'errors' => (
     is => 'rw',
@@ -66,18 +70,32 @@ sub _do_request {
         map { split '=', $_, 2 }
             split '&', $res->content };
 
+    my $res_object = WebService::PayPal::NVP::Response->new;
     if ($resp->{ACK} ne 'Success') {
-        $self->errors([]);
+        $res_object->errors([]);
         my $i = 0;
         while(my $err = $resp->{"L_LONGMESSAGE${i}"}) {
-            push @{$self->errors},
+            push @{$res_object->errors},
                 $resp->{"L_LONGMESSAGE${i}"};
             $i += 1;
-            #last if not $resp->{"L_LONGMESSAGE${i}"};
         }
+
+        $res_object->success(0);
+    }
+    else {
+        $res_object->success(1);
     }
 
-    return $resp;
+    {
+        no strict 'refs';
+        foreach my $key (keys %$resp) {
+            my $lc_key = lc $key;
+            *{"WebService::PayPal::NVP::Response::$lc_key"} = sub {
+                return $resp->{$key};
+            };
+        }
+    }
+    return $res_object; 
 }
 
 sub _build_content {

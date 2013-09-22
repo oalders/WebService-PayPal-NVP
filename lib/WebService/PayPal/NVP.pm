@@ -166,9 +166,14 @@ This module is the result of a desperate attempt to save instances of L<Business
         SHIPTOCOUNTRYCODE => 'GB',
     });
     
-    if ($res->{ACK} ne 'Success') {
+    if ($res->success) {
+        for my $option ($res->options) {
+            say "$option => " . $res->$option
+        }
+    }
+    else {
         say $_
-          for @{$nvp->errors};
+          for @{$res->errors};
     }
 
 =head1 AUTHOR

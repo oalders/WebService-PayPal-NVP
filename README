@@ -33,9 +33,14 @@ SYNTAX
             SHIPTOCOUNTRYCODE => 'GB',
         });
     
-        if ($res->{ACK} ne 'Success') {
+        if ($res->success) {
+            for my $option ($res->options) {
+                say "$option => " . $res->$option
+            }
+        }
+        else {
             say $_
-              for @{$nvp->errors};
+              for @{$res->errors};
         }
 
 AUTHOR

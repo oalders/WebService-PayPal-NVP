@@ -34,8 +34,15 @@ SYNTAX
         });
     
         if ($res->success) {
-            for my $option ($res->options) {
-                say "$option => " . $res->$option
+            # timestamps turned into DateTime objects
+            say "Response received at "
+                . $res->timestamp->dmy . " "
+                . $res->timestamp->hms(':');
+
+            for my $arg ($res->args) {
+                if ($res->has_arg($arg)) {
+                    say "$arg => " . $res->$arg;
+                }
             }
         }
         else {

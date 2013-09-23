@@ -89,6 +89,7 @@ sub _do_request {
 
     {
         no strict 'refs';
+        no warnings 'redefine';
         foreach my $key (keys %$resp) {
             my $val    = $resp->{$key};
             my $lc_key = lc $key;

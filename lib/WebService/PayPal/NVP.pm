@@ -1,6 +1,7 @@
 package WebService::PayPal::NVP;
 
 use Moo;
+use DateTime;
 use LWP::UserAgent ();
 use URI::Escape qw/uri_escape uri_unescape/;
 use WebService::PayPal::NVP::Response;
@@ -89,9 +90,31 @@ sub _do_request {
     {
         no strict 'refs';
         foreach my $key (keys %$resp) {
+            my $val    = $resp->{$key};
             my $lc_key = lc $key;
+            if ($lc_key eq 'timestamp') {
+                if ($val =~ /(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)Z/) {
+                    my ($day, $month, $year, $hour, $min, $sec) = (
+                        $3,
+                        $2,
+                        $1,
+                        $4,
+                        $5,
+                        $6
+                    );
+                    
+                    $val = DateTime->new(
+                        year    => $year,
+                        month   => $month,
+                        day     => $day,
+                        hour    => $hour,
+                        minute  => $min,
+                        second  => $sec,
+                    );
+                }
+            }
             *{"WebService::PayPal::NVP::Response::$lc_key"} = sub {
-                return $resp->{$key};
+                return $val;
             };
         }
     }
@@ -167,8 +190,15 @@ This module is the result of a desperate attempt to save instances of L<Business
     });
     
     if ($res->success) {
-        for my $option ($res->options) {
-            say "$option => " . $res->$option
+        # timestamps turned into DateTime objects
+        say "Response received at "
+            . $res->timestamp->dmy . " "
+            . $res->timestamp->hms(':');
+
+        for my $arg ($res->args) {
+            if ($res->has_arg($arg)) {
+                say "$arg => " . $res->$arg;
+            }
         }
     }
     else {

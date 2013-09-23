@@ -29,9 +29,10 @@ build_requires (
 );
 
 requires (
-    'LWP::UserAgent',
     'Moo',
+    'LWP::UserAgent',
     'URI::Escape',
+    'DateTime',
 );
 
 install_as_cpan;

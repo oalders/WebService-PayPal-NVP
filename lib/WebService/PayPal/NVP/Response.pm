@@ -4,7 +4,12 @@ use Moo;
 has 'success' => ( is => 'rw', default => sub { 0 } );
 has 'errors'  => ( is => 'rw', default => sub { [] } );
 
-sub options {
+sub has_arg {
+    my ($self, $arg) = @_;
+    return $self->can($arg);
+}
+
+sub args {
     my ($self) = @_;
     my @moothods = qw/
         around before can after

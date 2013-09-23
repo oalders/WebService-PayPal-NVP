@@ -6,10 +6,7 @@ use LWP::UserAgent ();
 use URI::Escape qw/uri_escape uri_unescape/;
 use WebService::PayPal::NVP::Response;
 
-use feature 'state';
-
-our $VERSION = '0.002';
-$WebService::PayPal::NVP::counter = 0;
+our $VERSION = '0.001';
 
 has 'errors' => (
     is => 'rw',
@@ -95,14 +92,8 @@ sub _do_request {
             my $lc_key = lc $key;
             if ($lc_key eq 'timestamp') {
                 if ($val =~ /(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)Z/) {
-                    my ($day, $month, $year, $hour, $min, $sec) = (
-                        $3,
-                        $2,
-                        $1,
-                        $4,
-                        $5,
-                        $6
-                    );
+                    my ($day, $month, $year, $hour, $min, $sec)
+                     = ($3, $2, $1, $4, $5, $6);
                     
                     $val = DateTime->new(
                         year    => $year,
@@ -137,19 +128,25 @@ sub _build_content {
 sub set_express_checkout {
     my ($self, $args) = @_;
     $args->{method} = 'SetExpressCheckout';
-    $self->_do_request( $args );
+    $self->_do_request($args);
 }
 
 sub do_express_checkout_payment {
     my ($self, $args) = @_;
     $args->{method} = 'DoExpressCheckoutPayment';
-    $self->_do_request( $args );
+    $self->_do_request($args);
 }
 
 sub get_express_checkout_details {
     my ($self, $args) = @_;
     $args->{method} = 'GetExpressCheckoutDetails';
-    $self->_do_request( $args );
+    $self->_do_request($args);
+}
+
+sub do_direct_payment {
+    my ($self, $args) = @_;
+    $args->{method} = 'DoDirectPayment';
+    $self->_do_request($args);
 }
 
 1;
@@ -161,7 +158,9 @@ WebService::PayPal::NVP - PayPal NVP API
 
 =head1 DESCRIPTION
 
-This module is the result of a desperate attempt to save instances of L<Business::PayPal::NVP>. It didn't seem to work inside accessors or Catalyst Adaptors. Although the module worked, this was a major drawback for me. So I re-engineered it using the lovely L<Moo>.
+A pure object oriented interface to PayPal's NVP API (Name-Value Pair). A lot of the logic in this module was taken from L<Business::PayPal::NVP>. I re-wrote it because it wasn't working with Catalyst adaptors and I couldn't save instances of it in Moose-type accessors. Otherwise it worked fine. So if you don't need that kind of support you should visit L<Business::PayPal::NVP>!.
+Currently supports C<do_direct_payment>, C<do_express_checkout_payment>, C<get_express_checkout_details> and C<set_express_checkout>. Another difference with this module compared to L<Business::PayPal::NVP> is that the keys may be passed as lowercase. Also, a response will return a WebService::PayPal::NVP::Response object where the response values are methods. Timestamps will automatically be converted to DateTime objects for your convenience.
+
 
 =head1 SYNTAX
 
@@ -196,6 +195,8 @@ This module is the result of a desperate attempt to save instances of L<Business
             . $res->timestamp->dmy . " "
             . $res->timestamp->hms(':');
 
+        say $res->token;
+
         for my $arg ($res->args) {
             if ($res->has_arg($arg)) {
                 say "$arg => " . $res->$arg;
@@ -210,6 +211,11 @@ This module is the result of a desperate attempt to save instances of L<Business
 =head1 AUTHOR
 
 Brad Haywood <brad@geeksware.com>
+
+=head1 CREDITS
+
+A lot of this module was taken from L<Business::PayPal::NVP> by Scott Wiersdorf. 
+It was only rewritten in order to work properly in L<Catalyst::Model::Adaptor>.
 
 =head1 LICENSE
 

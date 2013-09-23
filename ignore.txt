@@ -16,3 +16,4 @@ pod2htm*.tmp
 pm_to_blib
 WebService-PayPal-NVP-*
 WebService-PayPal-NVP-*.tar.gz
+.git/

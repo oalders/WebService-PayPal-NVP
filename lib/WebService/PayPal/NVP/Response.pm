@@ -3,6 +3,22 @@ package WebService::PayPal::NVP::Response;
 use Moo;
 has 'success' => ( is => 'rw', default => sub { 0 } );
 has 'errors'  => ( is => 'rw', default => sub { [] } );
+has 'branch'  => ( is => 'rw', isa => sub {
+    die "Response branch expects 'live' or 'sandbox' only\n"
+        if $_[0] ne 'live' and $_[0] ne 'sandbox';
+} );
+
+sub express_checkout_uri {
+    my ($self) = @_;
+    if ($self->can('token')) {
+        my $www = $self->branch eq 'live' ?
+            'www' : 'www.sandbox';
+        return "https://${www}.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=" .
+            $self->token . "&useraction=commit";
+    }
+
+    return;
+}
 
 sub has_arg {
     my ($self, $arg) = @_;

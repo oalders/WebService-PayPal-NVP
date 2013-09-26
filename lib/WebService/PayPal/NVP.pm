@@ -68,7 +68,10 @@ sub _do_request {
         map { split '=', $_, 2 }
             split '&', $res->content };
 
-    my $res_object = WebService::PayPal::NVP::Response->new;
+    my $res_object = WebService::PayPal::NVP::Response->new(
+        branch => $self->branch
+    );
+;
     if ($resp->{ACK} ne 'Success') {
         $res_object->errors([]);
         my $i = 0;
@@ -201,6 +204,13 @@ Currently supports C<do_direct_payment>, C<do_express_checkout_payment>, C<get_e
             if ($res->has_arg($arg)) {
                 say "$arg => " . $res->$arg;
             }
+        }
+
+        # get a redirect uri to paypal express checkout
+        # the Response object will automatically detect if you have 
+        # live or sandbox and return the appropriate url for you
+        if (my $redirect_user_to = $res->express_checkout_uri) {
+            $web_framework->redirect( $redirect_user_to );
         }
     }
     else {

@@ -2,10 +2,18 @@ NAME
     WebService::PayPal::NVP - PayPal NVP API
 
 DESCRIPTION
-    This module is the result of a desperate attempt to save instances of
-    Business::PayPal::NVP. It didn't seem to work inside accessors or
-    Catalyst Adaptors. Although the module worked, this was a major drawback
-    for me. So I re-engineered it using the lovely Moo.
+    A pure object oriented interface to PayPal's NVP API (Name-Value Pair).
+    A lot of the logic in this module was taken from Business::PayPal::NVP.
+    I re-wrote it because it wasn't working with Catalyst adaptors and I
+    couldn't save instances of it in Moose-type accessors. Otherwise it
+    worked fine. So if you don't need that kind of support you should visit
+    Business::PayPal::NVP!. Currently supports "do_direct_payment",
+    "do_express_checkout_payment", "get_express_checkout_details" and
+    "set_express_checkout". Another difference with this module compared to
+    Business::PayPal::NVP is that the keys may be passed as lowercase. Also,
+    a response will return a WebService::PayPal::NVP::Response object where
+    the response values are methods. Timestamps will automatically be
+    converted to DateTime objects for your convenience.
 
 SYNTAX
         my $nvp = WebService::PayPal::NVP->new(
@@ -39,10 +47,19 @@ SYNTAX
                 . $res->timestamp->dmy . " "
                 . $res->timestamp->hms(':');
 
+            say $res->token;
+
             for my $arg ($res->args) {
                 if ($res->has_arg($arg)) {
                     say "$arg => " . $res->$arg;
                 }
+            }
+
+            # get a redirect uri to paypal express checkout
+            # the Response object will automatically detect if you have 
+            # live or sandbox and return the appropriate url for you
+            if (my $redirect_user_to = $res->express_checkout_uri) {
+                $web_framework->redirect( $redirect_user_to );
             }
         }
         else {
@@ -52,6 +69,11 @@ SYNTAX
 
 AUTHOR
     Brad Haywood <brad@geeksware.com>
+
+CREDITS
+    A lot of this module was taken from Business::PayPal::NVP by Scott
+    Wiersdorf. It was only rewritten in order to work properly in
+    Catalyst::Model::Adaptor.
 
 LICENSE
     You may distribute this code under the same terms as Perl itself.

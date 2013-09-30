@@ -3,10 +3,10 @@ package WebService::PayPal::NVP;
 use Moo;
 use DateTime;
 use LWP::UserAgent ();
-use URI::Escape qw/uri_escape uri_unescape/;
+use URI::Escape qw/uri_escape uri_escape_utf8 uri_unescape/;
 use WebService::PayPal::NVP::Response;
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 has 'errors' => (
     is => 'rw',
@@ -122,7 +122,7 @@ sub _build_content {
     for my $key (keys %$args) {
         $args->{$key} = defined $args->{$key} ? $args->{$key} : '';
         push @args,
-            uc(uri_escape($key)) . '=' . uri_escape($args->{$key});
+            uc(uri_escape($key)) . '=' . uri_escape_utf8($args->{$key});
     }
 
     return (join '&', @args) || '';

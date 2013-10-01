@@ -218,6 +218,18 @@ Currently supports C<do_direct_payment>, C<do_express_checkout_payment>, C<get_e
           for @{$res->errors};
     }
 
+=head1 TESTING
+
+The main test will not work out of the box, because obviously it needs some sandbox/live api details before it can proceed. Simply create an C<auth.yml> file in the distribution directory with the following details:
+
+    ---
+    user: 'api_user'
+    pass: 'api password'
+    sig:  'api signature'
+    branch: 'sandbox or live'
+
+If it detects the file missing completely it will just skip every test. Otherwise, it will only fail if any of the required information is missing.
+
 =head1 AUTHOR
 
 Brad Haywood <brad@geeksware.com>

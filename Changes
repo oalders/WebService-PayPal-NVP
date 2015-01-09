@@ -1,5 +1,9 @@
 Revision history for Perl module WebService::PayPal::NVP
 
+- Add create_recurring_payments_profile(),
+  manage_recurring_payments_profile_status(), mass_pay() and
+  refund_transaction() methods (Olaf Alders)
+
 0.002 2013-09-26
 
 0.001 2013-09-23

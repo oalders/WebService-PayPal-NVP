@@ -152,6 +152,30 @@ sub do_direct_payment {
     $self->_do_request($args);
 }
 
+sub create_recurring_payments_profile {
+    my ($self, $args) = @_;
+    $args->{method} = 'CreateRecurringPaymentsProfile';
+    $self->_do_request($args);
+}
+
+sub manage_recurring_payments_profile_status {
+    my ($self, $args) = @_;
+    $args->{method} = 'ManageRecurringPaymentsProfileStatus';
+    $self->_do_request($args);
+}
+
+sub mass_pay {
+    my ($self, $args) = @_;
+    $args->{method} = 'MassPay';
+    $self->_do_request($args);
+}
+
+sub refund_transaction {
+    my ($self, $args) = @_;
+    $args->{method} = 'RefundTransaction';
+    $self->_do_request($args);
+}
+
 1;
 __END__
 
@@ -168,7 +192,7 @@ Currently supports C<do_direct_payment>, C<do_express_checkout_payment>, C<get_e
 =head1 SYNTAX
 
     my $nvp = WebService::PayPal::NVP->new(
-        user   => 'user.tld'
+        user   => 'user.tld',
         pwd    => 'xxx',
         sig    => 'xxxxxxx',
         branch => 'sandbox',
@@ -217,6 +241,24 @@ Currently supports C<do_direct_payment>, C<do_express_checkout_payment>, C<get_e
         say $_
           for @{$res->errors};
     }
+
+=head1 METHODS
+
+=head2 create_recurring_payments_profile( $HashRef )
+
+=head2 do_direct_payment( $HashRef )
+
+=head2 do_express_checkout_payment( $HashRef )
+
+=head2 get_express_checkout_details( $HashRef )
+
+=head2 manage_recurring_payments_profile_status( $HashRef )
+
+=head2 mass_pay( $HashRef )
+
+=head2 refund_transaction( $HashRef )
+
+=head2 set_express_checkout( $HashRef )
 
 =head1 TESTING
 

@@ -168,7 +168,7 @@ Currently supports C<do_direct_payment>, C<do_express_checkout_payment>, C<get_e
 =head1 SYNTAX
 
     my $nvp = WebService::PayPal::NVP->new(
-        user   => 'user.tld'
+        user   => 'user.tld',
         pwd    => 'xxx',
         sig    => 'xxxxxxx',
         branch => 'sandbox',

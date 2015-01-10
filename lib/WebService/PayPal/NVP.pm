@@ -6,7 +6,7 @@ use LWP::UserAgent ();
 use URI::Escape qw/uri_escape uri_escape_utf8 uri_unescape/;
 use WebService::PayPal::NVP::Response;
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 has 'errors' => (
     is => 'rw',
@@ -186,7 +186,7 @@ WebService::PayPal::NVP - PayPal NVP API
 =head1 DESCRIPTION
 
 A pure object oriented interface to PayPal's NVP API (Name-Value Pair). A lot of the logic in this module was taken from L<Business::PayPal::NVP>. I re-wrote it because it wasn't working with Catalyst adaptors and I couldn't save instances of it in Moose-type accessors. Otherwise it worked fine. So if you don't need that kind of support you should visit L<Business::PayPal::NVP>!.
-Currently supports C<do_direct_payment>, C<do_express_checkout_payment>, C<get_express_checkout_details> and C<set_express_checkout>. Another difference with this module compared to L<Business::PayPal::NVP> is that the keys may be passed as lowercase. Also, a response will return a WebService::PayPal::NVP::Response object where the response values are methods. Timestamps will automatically be converted to DateTime objects for your convenience.
+Another difference with this module compared to Business::PayPal::NVP is that the keys may be passed as lowercase. Also, a response will return a WebService::PayPal::NVP::Response object where the response values are methods. Timestamps will automatically be converted to DateTime objects for your convenience.
 
 
 =head1 SYNTAX

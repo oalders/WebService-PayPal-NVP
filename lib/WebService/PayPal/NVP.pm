@@ -204,7 +204,7 @@ Another difference with this module compared to Business::PayPal::NVP is that th
         CURRENCYCODE      => 'GBP',
         PAYMENTACTION     => 'Sale',
         RETURNURL         => "http://returnurl.tld",
-        CANCELURL         => 'http//cancelurl.tld",
+        CANCELURL         => "http//cancelurl.tld",
         LANDINGPAGE       => 'Login',
         ADDOVERRIDE       => 1,
         SHIPTONAME        => "Customer Name",

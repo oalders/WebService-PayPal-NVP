@@ -1,40 +1,22 @@
-use 5.006;
-use strict;
-use warnings FATAL => 'all';
-use inc::Module::Install;
+use 5.010;
+use ExtUtils::MakeMaker;
 
-name     'WebService-PayPal-NVP';
-all_from 'lib/WebService/PayPal/NVP.pm';
-author   q{Brad Haywood <brad@geeksware.com>};
-license  'artistic2';
-
-perl_version 5.006;
-
-tests_recursive('t');
-
-resources (
-   #homepage   => 'http://yourwebsitehere.com',
-   #IRC        => 'irc://irc.perl.org/#WebService-PayPal-NVP',
-   license    => 'http://www.perlfoundation.org/artistic_license_2_0',
-   #repository => 'git://github.com/Brad Haywood/WebService-PayPal-NVP.git',
-   #bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=WebService-PayPal-NVP',
+WriteMakefile(
+    NAME            => 'WebService::PayPal::NVP',
+    VERSION_FROM    => 'lib/WebService/PayPal/NVP.pm',
+    ABSTRACT        => 'PayPal Name-Value-Pair API',
+    CONFIGURE_REQUIRES => { 'ExtUtils::MakeMaker' => 0, },
+    DISTNAME        => 'WebService-PayPal-NVP',
+    TEST_REQUIRES   => {
+        'Test::More' => 0,
+        'YAML::Syck' => 0,
+    },
+    LICENSE         => 'perl_5',
+    PREREQ_PM       => {
+        'Moo'               => 0,
+        'LWP::UserAgent'    => 0,
+        'URI::Escape'       => 0,
+        'DateTime'          => 0,
+        'YAML::Syck'        => 0,
+    },        
 );
-
-configure_requires (
-   'Module::Install' => 0,
-);
-
-build_requires (
-   'Test::More' => 0,
-);
-
-requires (
-    'Moo',
-    'LWP::UserAgent',
-    'URI::Escape',
-    'DateTime',
-);
-
-install_as_cpan;
-auto_install;
-WriteAll;

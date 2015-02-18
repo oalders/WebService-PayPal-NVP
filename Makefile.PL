@@ -18,5 +18,15 @@ WriteMakefile(
         'URI::Escape'       => 0,
         'DateTime'          => 0,
         'YAML::Syck'        => 0,
-    },        
+    },
+    META_MERGE => {
+        'meta-spec' => { version => 2 },
+         resources => {
+             repository => {
+                 type => 'git',
+                 url  => 'https://github.com/bradhaywood/WebService-PayPal-NVP.git',
+                 web  => 'https://github.com/bradhaywood/WebService-PayPal-NVP',
+             },
+         },
+    },
 );

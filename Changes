@@ -1,5 +1,7 @@
 Revision history for Perl module WebService::PayPal::NVP
 
+ - Allow a custom UserAgent to be provided to constructor (Olaf Alders)
+
 0.003 2015-10-01
  - Using ExtUtils::MakeMaker now
  - Converted readme to markdown

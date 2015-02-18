@@ -3,6 +3,7 @@ package WebService::PayPal::NVP;
 use Moo;
 use DateTime;
 use LWP::UserAgent ();
+use MooX::Types::MooseLike::Base qw( InstanceOf );
 use URI::Escape qw/uri_escape uri_escape_utf8 uri_unescape/;
 use WebService::PayPal::NVP::Response;
 
@@ -15,6 +16,12 @@ has 'errors' => (
             unless ref $_[0] eq 'ARRAY';
     },
     default => sub { [] },
+);
+
+has 'ua' => (
+    is      => 'ro',
+    isa     => InstanceOf['LWP::UserAgent'],
+    builder => '_build_ua'
 );
 
 has 'user' => ( is => 'rw', required => 1 );
@@ -37,12 +44,17 @@ sub BUILDARGS {
 
     return \%args;
 }
+sub _build_ua {
+    my $self = shift;
+
+    my $lwp = LWP::UserAgent->new;
+    $lwp->agent("p-Webservice-PayPal-NVP/${VERSION}");
+    return $lwp;
+}
 
 sub _do_request {
     my ($self, $args) = @_;
-    my $lwp = LWP::UserAgent->new;
-    $lwp->agent("p-Webservice-PayPal-NVP/${VERSION}");
-    
+
     my $req = HTTP::Request->new(POST => $self->url);
     $req->content_type('application/x-www-form-urlencoded');
 
@@ -57,7 +69,7 @@ sub _do_request {
     my $allargs = { %$authargs, %$args };
     my $content = $self->_build_content( $allargs );
     $req->content($content);
-    my $res = $lwp->request($req);
+    my $res = $self->ua->request($req);
 
     unless ($res->code == 200) {
         $self->errors(["Failure: " . $res->code . ": " . $res->message]);
@@ -259,6 +271,11 @@ Another difference with this module compared to Business::PayPal::NVP is that th
 =head2 refund_transaction( $HashRef )
 
 =head2 set_express_checkout( $HashRef )
+
+=head2 ua( LWP::UserAgent->new( ... ) )
+
+This method allows you to provide your own UserAgent.  This object must be of
+the L<LWP::UserAgent> family, so L<WWW::Mechanize> modules will also work.
 
 =head1 TESTING
 

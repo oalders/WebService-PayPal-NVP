@@ -7,16 +7,28 @@ WriteMakefile(
     ABSTRACT        => 'PayPal Name-Value-Pair API',
     CONFIGURE_REQUIRES => { 'ExtUtils::MakeMaker' => 0, },
     DISTNAME        => 'WebService-PayPal-NVP',
-    TEST_REQUIRES   => {
-        'Test::More' => 0,
-        'YAML::Syck' => 0,
+    TEST_REQUIRES => {
+        'Test::More'             => 0,
+        'Test::RequiresInternet' => 0.04,
+        'YAML::Syck'             => 0,
     },
     LICENSE         => 'perl_5',
-    PREREQ_PM       => {
-        'Moo'               => 0,
-        'LWP::UserAgent'    => 0,
-        'URI::Escape'       => 0,
-        'DateTime'          => 0,
-        'YAML::Syck'        => 0,
-    },        
+    PREREQ_PM => {
+        'Moo'                          => 0,
+        'LWP::UserAgent'               => 0,
+        'MooX::Types::MooseLike::Base' => 0.27,
+        'URI::Escape'                  => 0,
+        'DateTime'                     => 0,
+        'YAML::Syck'                   => 0,
+    },
+    META_MERGE => {
+        'meta-spec' => { version => 2 },
+         resources => {
+             repository => {
+                 type => 'git',
+                 url  => 'https://github.com/bradhaywood/WebService-PayPal-NVP.git',
+                 web  => 'https://github.com/bradhaywood/WebService-PayPal-NVP',
+             },
+         },
+    },
 );

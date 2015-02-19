@@ -10,7 +10,7 @@ SKIP: {
     # can't really say the tests fail if the auth file is missing (user error)
     # so let's just skip it and alert them why
     unless (-f "auth.yml") {
-        skip "auth.yml file missing with PayPal API credentials", 8
+        skip "auth.yml file missing with PayPal API credentials", 2
     }
 
     my $config = LoadFile("auth.yml");
@@ -18,7 +18,7 @@ SKIP: {
         branch  => $config->{branch},
         user    => $config->{user},
         pwd     => $config->{pass},
-        sig     => $config->{sig}, 
+        sig     => $config->{sig},
     );
 
     my $res = $nvp->manage_recurring_payments_profile_status({

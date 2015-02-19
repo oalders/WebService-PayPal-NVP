@@ -170,6 +170,12 @@ sub create_recurring_payments_profile {
     $self->_do_request($args);
 }
 
+sub get_recurring_payments_profile_details {
+    my ($self, $args) = @_;
+    $args->{method} = 'GetRecurringPaymentsProfileDetails';
+    $self->_do_request($args);
+}
+
 sub manage_recurring_payments_profile_status {
     my ($self, $args) = @_;
     $args->{method} = 'ManageRecurringPaymentsProfileStatus';
@@ -263,6 +269,8 @@ Another difference with this module compared to Business::PayPal::NVP is that th
 =head2 do_express_checkout_payment( $HashRef )
 
 =head2 get_express_checkout_details( $HashRef )
+
+=head2 get_recurring_payments_profile_details( $HashRef )
 
 =head2 manage_recurring_payments_profile_status( $HashRef )
 

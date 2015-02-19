@@ -26,7 +26,12 @@ SKIP: {
         { profileid => 'foo' } );
 
     ok !$res->success, 'We know this will fail';
-    is( $res->errors->[0], 'The profile ID is invalid', 'error message' );
+    ok( (          $res->errors->[0] eq 'The profile ID is invalid'
+                || $res->errors->[0] eq
+                'Subscription Profiles not supported by Recurring Payment APIs'
+        ),
+        'error message'
+    );
 }
 
 done_testing();

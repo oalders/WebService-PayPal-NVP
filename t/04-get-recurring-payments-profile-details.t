@@ -9,25 +9,24 @@ SKIP: {
     # we only want to run tests if auth exists
     # can't really say the tests fail if the auth file is missing (user error)
     # so let's just skip it and alert them why
-    unless (-f "auth.yml") {
-        skip "auth.yml file missing with PayPal API credentials", 2
+    unless ( -f 'auth.yml' ) {
+        skip 'auth.yml file missing with PayPal API credentials', 2;
     }
 
-    my $config = LoadFile("auth.yml");
-    my $nvp = WebService::PayPal::NVP->new(
+    my $config = LoadFile( 'auth.yml' );
+    my $nvp    = WebService::PayPal::NVP->new(
+        api_ver => 95,
         branch  => $config->{branch},
-        user    => $config->{user},
         pwd     => $config->{pass},
         sig     => $config->{sig},
+        user    => $config->{user},
     );
 
-    my $res = $nvp->manage_recurring_payments_profile_status({
-        profileid => 'foo',
-        action => 'cancel',
-    });
+    my $res = $nvp->get_recurring_payments_profile_details(
+        { profileid => 'foo' } );
 
     ok !$res->success, 'We know this will fail';
-    is( $res->errors->[0],'The profile ID is invalid','error message' );
+    is( $res->errors->[0], 'The profile ID is invalid', 'error message' );
 }
 
 done_testing();

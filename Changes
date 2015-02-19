@@ -1,8 +1,9 @@
 Revision history for Perl module WebService::PayPal::NVP
 
  - Allow a custom UserAgent to be provided to constructor (Olaf Alders)
+ - Add get_recurring_payments_profile_details() method (Olaf Alders)
 
-0.003 2015-10-01
+0.003 2015-01-10
  - Using ExtUtils::MakeMaker now
  - Converted readme to markdown
  - Fixed typo in pod (Olaf Alders)

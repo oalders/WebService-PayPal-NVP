@@ -212,7 +212,7 @@ A pure object oriented interface to PayPal's NVP API (Name-Value Pair). A lot of
 Another difference with this module compared to Business::PayPal::NVP is that the keys may be passed as lowercase. Also, a response will return a WebService::PayPal::NVP::Response object where the response values are methods. Timestamps will automatically be converted to DateTime objects for your convenience.
 
 
-=head1 SYNTAX
+=head1 SYNOPSIS
 
     my $nvp = WebService::PayPal::NVP->new(
         user   => 'user.tld',
@@ -267,6 +267,10 @@ Another difference with this module compared to Business::PayPal::NVP is that th
 
 =head1 METHODS
 
+=head2 api_ver
+
+The version of PayPal's NVP API which you would like to use.  Defaults to 51.
+
 =head2 errors
 
 Returns an C<ArrayRef> of errors.  The ArrayRef is empty when there are no
@@ -298,6 +302,11 @@ Returns true if C<errors()> is non-empty.
 
 This method allows you to provide your own UserAgent.  This object must be of
 the L<LWP::UserAgent> family, so L<WWW::Mechanize> modules will also work.
+
+=head2 url
+
+The PayPal URL to use for requests.  This can be helpful when mocking requests.
+Defaults to PayPals production or sandbox URL as appropriate.
 
 =head1 TESTING
 

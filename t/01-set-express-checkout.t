@@ -27,6 +27,8 @@ SKIP: {
         sig     => $config->{sig}, 
     );
 
+    ok ( !$nvp->has_errors, 'no errors on connect' );
+
     is ref($nvp), 'WebService::PayPal::NVP', "Created WebService::PayPal::NVP instance";
 
     my $res = $nvp->set_express_checkout({
@@ -53,6 +55,8 @@ SKIP: {
     ok $res->success, "Response was successful";
     warn $_ for @{$res->errors};
     ok $res->token, "Received a valid token (". $res->token .")";
+    ok( !$res->has_errors, 'no errors' );
+    diag "errors: " . $res->has_errors;
 }
 
 done_testing();

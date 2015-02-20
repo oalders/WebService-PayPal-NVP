@@ -25,6 +25,11 @@ sub has_arg {
     return $self->can($arg);
 }
 
+sub has_errors {
+    my $self = shift;
+    return scalar @{$self->errors} > 0;
+}
+
 sub args {
     my ($self) = @_;
     my @moothods = qw/
@@ -47,3 +52,28 @@ sub args {
 
 1;
 __END__
+
+=head1 NAME
+
+WebService::PayPal::NVP::Response - PayPal NVP API response object
+
+=pod
+
+=head2 success
+
+Returns true on success, false on failure.
+
+=head2 branch
+
+Returns either 'live' or 'sandbox'.
+
+=head2 errors
+
+Returns an C<ArrayRef> of errors.  The ArrayRef is empty when there are no
+errors.
+
+=head2 has_errors
+
+Returns true if C<errors()> is non-empty.
+
+=cut

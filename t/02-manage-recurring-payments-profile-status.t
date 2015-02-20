@@ -21,6 +21,8 @@ SKIP: {
         sig     => $config->{sig},
     );
 
+    ok( !$nvp->has_errors, 'no errors on connect' );
+
     my $res = $nvp->manage_recurring_payments_profile_status({
         profileid => 'foo',
         action => 'cancel',
@@ -28,6 +30,7 @@ SKIP: {
 
     ok !$res->success, 'We know this will fail';
     is( $res->errors->[0],'The profile ID is invalid','error message' );
+    ok( $res->has_errors, 'response has errors' );
 }
 
 done_testing();

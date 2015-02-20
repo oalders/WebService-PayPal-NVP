@@ -140,6 +140,11 @@ sub _build_content {
     return (join '&', @args) || '';
 }
 
+sub has_errors {
+    my $self = shift;
+    return scalar @{$self->errors} > 0;
+}
+
 sub set_express_checkout {
     my ($self, $args) = @_;
     $args->{method} = 'SetExpressCheckout';
@@ -261,6 +266,15 @@ Another difference with this module compared to Business::PayPal::NVP is that th
     }
 
 =head1 METHODS
+
+=head2 errors
+
+Returns an C<ArrayRef> of errors.  The ArrayRef is empty when there are no
+errors.
+
+=head2 has_errors
+
+Returns true if C<errors()> is non-empty.
 
 =head2 create_recurring_payments_profile( $HashRef )
 

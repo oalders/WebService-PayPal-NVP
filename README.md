@@ -7,7 +7,7 @@ WebService::PayPal::NVP - PayPal NVP API
 A pure object oriented interface to PayPal's NVP API (Name-Value Pair). A lot of the logic in this module was taken from [Business::PayPal::NVP](https://metacpan.org/pod/Business::PayPal::NVP). I re-wrote it because it wasn't working with Catalyst adaptors and I couldn't save instances of it in Moose-type accessors. Otherwise it worked fine. So if you don't need that kind of support you should visit [Business::PayPal::NVP](https://metacpan.org/pod/Business::PayPal::NVP)!.
 Another difference with this module compared to Business::PayPal::NVP is that the keys may be passed as lowercase. Also, a response will return a WebService::PayPal::NVP::Response object where the response values are methods. Timestamps will automatically be converted to DateTime objects for your convenience.
 
-# SYNTAX
+# SYNOPSIS
 
 ```perl
 my $nvp = WebService::PayPal::NVP->new(
@@ -64,6 +64,19 @@ else {
 
 # METHODS
 
+## api\_ver
+
+The version of PayPal's NVP API which you would like to use.  Defaults to 51.
+
+## errors
+
+Returns an `ArrayRef` of errors.  The ArrayRef is empty when there are no
+errors.
+
+## has\_errors
+
+Returns true if `errors()` is non-empty.
+
 ## create\_recurring\_payments\_profile( $HashRef )
 
 ## do\_direct\_payment( $HashRef )
@@ -72,6 +85,8 @@ else {
 
 ## get\_express\_checkout\_details( $HashRef )
 
+## get\_recurring\_payments\_profile\_details( $HashRef )
+
 ## manage\_recurring\_payments\_profile\_status( $HashRef )
 
 ## mass\_pay( $HashRef )
@@ -79,6 +94,16 @@ else {
 ## refund\_transaction( $HashRef )
 
 ## set\_express\_checkout( $HashRef )
+
+## ua( LWP::UserAgent->new( ... ) )
+
+This method allows you to provide your own UserAgent.  This object must be of
+the [LWP::UserAgent](https://metacpan.org/pod/LWP::UserAgent) family, so [WWW::Mechanize](https://metacpan.org/pod/WWW::Mechanize) modules will also work.
+
+## url
+
+The PayPal URL to use for requests.  This can be helpful when mocking requests.
+Defaults to PayPals production or sandbox URL as appropriate.
 
 # TESTING
 
@@ -102,6 +127,10 @@ Brad Haywood <brad@geeksware.com>
 
 A lot of this module was taken from [Business::PayPal::NVP](https://metacpan.org/pod/Business::PayPal::NVP) by Scott Wiersdorf. 
 It was only rewritten in order to work properly in [Catalyst::Model::Adaptor](https://metacpan.org/pod/Catalyst::Model::Adaptor).
+
+## THANKS
+
+A huge thanks to Olaf Alders (OALDERS) for all of his useful pull requests!
 
 # LICENSE
 

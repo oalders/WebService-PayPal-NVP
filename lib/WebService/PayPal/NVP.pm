@@ -7,7 +7,7 @@ use MooX::Types::MooseLike::Base qw( InstanceOf );
 use URI::Escape qw/uri_escape uri_escape_utf8 uri_unescape/;
 use WebService::PayPal::NVP::Response;
 
-our $VERSION = '0.003';
+our $VERSION = '0.004';
 
 has 'errors' => (
     is => 'rw',
@@ -328,6 +328,10 @@ Brad Haywood <brad@geeksware.com>
 
 A lot of this module was taken from L<Business::PayPal::NVP> by Scott Wiersdorf. 
 It was only rewritten in order to work properly in L<Catalyst::Model::Adaptor>.
+
+=head2 THANKS
+
+A huge thanks to Olaf Alders (OALDERS) for all of his useful pull requests!
 
 =head1 LICENSE
 

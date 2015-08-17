@@ -81,7 +81,8 @@ sub _do_request {
             split '&', $res->content };
 
     my $res_object = WebService::PayPal::NVP::Response->new(
-        branch => $self->branch
+        branch => $self->branch,
+        raw => $resp
     );
 ;
     if ($resp->{ACK} ne 'Success') {
@@ -109,7 +110,7 @@ sub _do_request {
                 if ($val =~ /(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)Z/) {
                     my ($day, $month, $year, $hour, $min, $sec)
                      = ($3, $2, $1, $4, $5, $6);
-                    
+
                     $val = DateTime->new(
                         year    => $year,
                         month   => $month,
@@ -125,7 +126,7 @@ sub _do_request {
             };
         }
     }
-    return $res_object; 
+    return $res_object;
 }
 
 sub _build_content {
@@ -220,7 +221,7 @@ Another difference with this module compared to Business::PayPal::NVP is that th
         sig    => 'xxxxxxx',
         branch => 'sandbox',
     );
-    
+
     my $res = $nvp->set_express_checkout({
         DESC              => 'Payment for something cool',
         AMT               => 25.00,
@@ -231,14 +232,14 @@ Another difference with this module compared to Business::PayPal::NVP is that th
         LANDINGPAGE       => 'Login',
         ADDOVERRIDE       => 1,
         SHIPTONAME        => "Customer Name",
-        SHIPTOSTREET      => "7 Customer Street", 
-        SHIPTOSTREET2     => "", 
-        SHIPTOCITY        => "Town", 
-        SHIPTOZIP         => "Postcode", 
-        SHIPTOEMAIL       => "customer\@example.com", 
+        SHIPTOSTREET      => "7 Customer Street",
+        SHIPTOSTREET2     => "",
+        SHIPTOCITY        => "Town",
+        SHIPTOZIP         => "Postcode",
+        SHIPTOEMAIL       => "customer\@example.com",
         SHIPTOCOUNTRYCODE => 'GB',
     });
-    
+
     if ($res->success) {
         # timestamps turned into DateTime objects
         say "Response received at "
@@ -254,7 +255,7 @@ Another difference with this module compared to Business::PayPal::NVP is that th
         }
 
         # get a redirect uri to paypal express checkout
-        # the Response object will automatically detect if you have 
+        # the Response object will automatically detect if you have
         # live or sandbox and return the appropriate url for you
         if (my $redirect_user_to = $res->express_checkout_uri) {
             $web_framework->redirect( $redirect_user_to );
@@ -326,7 +327,7 @@ Brad Haywood <brad@geeksware.com>
 
 =head1 CREDITS
 
-A lot of this module was taken from L<Business::PayPal::NVP> by Scott Wiersdorf. 
+A lot of this module was taken from L<Business::PayPal::NVP> by Scott Wiersdorf.
 It was only rewritten in order to work properly in L<Catalyst::Model::Adaptor>.
 
 =head2 THANKS

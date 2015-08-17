@@ -1,6 +1,8 @@
 package WebService::PayPal::NVP::Response;
 
 use Moo;
+
+has 'raw'     => ( is => 'rw', default => sub { {} } );
 has 'success' => ( is => 'rw', default => sub { 0 } );
 has 'errors'  => ( is => 'rw', default => sub { [] } );
 has 'branch'  => ( is => 'rw', isa => sub {
@@ -36,6 +38,7 @@ sub args {
         around before can after
         import with new has
         options errors extends
+        args has_arg has_errors
     /;
     my @options;
     listmethods: {
@@ -58,6 +61,10 @@ __END__
 WebService::PayPal::NVP::Response - PayPal NVP API response object
 
 =pod
+
+=head2 raw
+
+raw response (HASHREF)
 
 =head2 success
 

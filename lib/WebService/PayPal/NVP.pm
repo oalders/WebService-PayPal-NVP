@@ -182,6 +182,12 @@ sub get_recurring_payments_profile_details {
     $self->_do_request($args);
 }
 
+sub get_transaction_details {
+    my ($self, $args) = @_;
+    $args->{method} = 'GetTransactionDetails';
+    $self->_do_request($args);
+}
+
 sub manage_recurring_payments_profile_status {
     my ($self, $args) = @_;
     $args->{method} = 'ManageRecurringPaymentsProfileStatus';
@@ -197,6 +203,12 @@ sub mass_pay {
 sub refund_transaction {
     my ($self, $args) = @_;
     $args->{method} = 'RefundTransaction';
+    $self->_do_request($args);
+}
+
+sub transaction_search {
+    my ( $self, $args ) = @_;
+    $args->{method} = 'TransactionSearch';
     $self->_do_request($args);
 }
 
@@ -291,6 +303,8 @@ Returns true if C<errors()> is non-empty.
 
 =head2 get_recurring_payments_profile_details( $HashRef )
 
+=head2 get_transaction_details( $HashRef )
+
 =head2 manage_recurring_payments_profile_status( $HashRef )
 
 =head2 mass_pay( $HashRef )
@@ -298,6 +312,8 @@ Returns true if C<errors()> is non-empty.
 =head2 refund_transaction( $HashRef )
 
 =head2 set_express_checkout( $HashRef )
+
+=head2 transaction_search( $HashRef )
 
 =head2 ua( LWP::UserAgent->new( ... ) )
 
